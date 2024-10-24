@@ -416,4 +416,6 @@ load.all.images: build.all.images
 	kind load docker-image $(BLIXT_DATAPLANE_IMAGE):$(TAG) --name $(KIND_CLUSTER) && \
 	kind load docker-image $(BLIXT_UDP_SERVER_IMAGE):$(TAG) --name $(KIND_CLUSTER) && \
 		kubectl -n blixt-system get deployment blixt-controlplane >/dev/null 2>&1 && \
-		kubectl -n blixt-system rollout restart deployment blixt-controlplane || true
+		kubectl -n blixt-system rollout restart deployment blixt-controlplane && \
+		kubectl -n blixt-system rollout restart daemonset blixt-dataplane || true
+

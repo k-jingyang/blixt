@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"net"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -204,6 +205,15 @@ func (r *TCPRouteReconciler) ensureTCPRouteConfiguredInDataPlane(ctx context.Con
 	if err != nil {
 		return err
 	}
+
+	b := make([]byte, 4) // 4 bytes for uint32.
+	c := make([]byte, 4) // 4 bytes for uint32.
+	binary.BigEndian.PutUint32(b, uint32(targets.Vip.GetIp()))
+	binary.BigEndian.PutUint32(c, uint32(targets.Targets[0].Daddr))
+
+	r.log.Info("dataplane targets", "targets", targets)
+	r.log.Info("vip", "vip", net.IP(b))
+	r.log.Info("target", "target", net.IP(c))
 
 	if _, err = r.BackendsClientManager.Update(ctx, targets); err != nil {
 		return err

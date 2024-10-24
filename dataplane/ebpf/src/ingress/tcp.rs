@@ -135,6 +135,12 @@ pub fn handle_tcp_ingress(ctx: TcContext) -> Result<i32, i64> {
     }
 
     let backend_port = (backend.dport as u16).to_be();
+    info!(
+        &ctx,
+        "redirecting to backend ip: {:i} at port: {}",
+        u32::from_be(backend_ip),
+        u16::from_be(backend_port)
+    );
     let ret = set_ipv4_dest_port(&ctx, TCP_CSUM_OFF, &original_dport, backend_port);
     if ret != 0 {
         return Ok(TC_ACT_OK);
