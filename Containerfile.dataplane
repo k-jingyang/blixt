@@ -29,6 +29,7 @@ RUN rustup target add $(eval cat arch)-unknown-linux-musl
 COPY dataplane dataplane 
 COPY tools/udp-test-server tools/udp-test-server
 COPY xtask xtask
+COPY Cargo.lock Cargo.lock
 COPY Cargo.toml Cargo.toml
 COPY .cargo .cargo
 
